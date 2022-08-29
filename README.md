@@ -1,5 +1,7 @@
 # Vuelist
 
+![alt text](/public/img/vuelist.png)
+
 ## Install dependencies
 ```
 npm install
@@ -14,4 +16,4 @@ npm run vuelist
 ```
 Vue.js & JSON Server
 ```
-![alt text](/public/img/vuelist.png)
+
