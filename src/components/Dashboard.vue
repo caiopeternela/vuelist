@@ -42,7 +42,7 @@
                 const data = await req.json()
                 this.tasks = data
             },
-            async deleteTask(id = 0) {
+            async deleteTask(id) {
                 const dataJson = JSON.stringify({task: this.task})
                 const req = await fetch(`http://localhost:3000/tasks/${id}`, {
                     method: "DELETE",
