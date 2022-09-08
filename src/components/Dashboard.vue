@@ -21,6 +21,8 @@
 </template>
 
 <script>
+    import axios from "axios"
+    axios.defaults.baseURL = "http://localhost:3000"
     export default {
         name: "Dashboard",
         data() {
@@ -36,13 +38,8 @@
         methods: {
             async addTask() {
                 if (this.task != null) {
-                    const dataJson = JSON.stringify({task: this.task, completed: false})
-                    const req = await fetch("http://localhost:3000/tasks", {
-                        method: "POST",
-                        headers: {"Content-Type": "application/json"},
-                        body: dataJson
-                    })
-                    const res = await req.json()
+                    const dataJson = {task: this.task, completed: false}
+                    const req = await axios.post("/tasks", dataJson)
                     this.getTasks()
                     this.task = null
                 } else {
@@ -50,18 +47,12 @@
                 }
             },
             async getTasks() {
-                const req = await fetch("http://localhost:3000/tasks")
-                const data = await req.json()
-                this.tasks = data
+                const req = await axios.get("/tasks")
+                this.tasks = req.data
             },
             async deleteTask(id) {
-                const dataJson = JSON.stringify({task: this.task})
-                const req = await fetch(`http://localhost:3000/tasks/${id}`, {
-                    method: "DELETE",
-                    headers: {"Content-Type": "application/json"},
-                    body: dataJson
-                })
-                const res = await req.json()
+                const dataJson = {task: this.task}
+                const req = await axios.delete(`http://localhost:3000/tasks/${id}`, dataJson)
                 this.task = null
                 this.getTasks()
             },
@@ -75,13 +66,8 @@
             async editTask() {
                 if (this.task != null) {
                     const newTask = this.task
-                    const dataJson = JSON.stringify({task: newTask})
-                    const req = await fetch(`http://localhost:3000/tasks/${this.id}`, {
-                        method: "PATCH",
-                        headers: {"Content-Type": "application/json"},
-                        body: dataJson
-                    })
-                    const res = await req.json()
+                    const dataJson = {task: newTask}
+                    const req = await axios.patch(`http://localhost:3000/tasks/${this.id}`, dataJson)
                     this.task = null
                     this.getTasks()
                     this.id = null
@@ -90,20 +76,14 @@
                 }
             },
             async editCompleted(id) {
-                const get = await fetch(`http://localhost:3000/tasks/${id}`)
-                const data = await get.json()
+                const get = await axios.get(`http://localhost:3000/tasks/${id}`)
                 let dataJson
-                if (data.completed == true) {
-                    dataJson = JSON.stringify({completed: false})
+                if (get.data.completed == true) {
+                    dataJson = {completed: false}
                 } else {
-                    dataJson = JSON.stringify({completed: true})
+                    dataJson = {completed: true}
                 }
-                const req = await fetch(`http://localhost:3000/tasks/${id}`, {
-                    method: "PATCH",
-                    headers: {"Content-Type": "application/json"},
-                    body: dataJson
-                })
-                const res = await req.json()
+                const req = await axios.patch(`http://localhost:3000/tasks/${id}`, dataJson)
                 this.getTasks()
             }
         },
