@@ -71,6 +71,7 @@
                     this.task = null
                     this.getTasks()
                     this.id = null
+                    this.editableMode = false
                 } else {
                     this.placeholderMsg = "Invalid task"
                 }
