@@ -21,8 +21,7 @@
 </template>
 
 <script>
-    import axios from "axios"
-    axios.defaults.baseURL = "http://localhost:3000"
+    import * as api from "../api.js"
     export default {
         name: "Dashboard",
         data() {
@@ -38,8 +37,7 @@
         methods: {
             async addTask() {
                 if (this.task != null) {
-                    const dataJson = {task: this.task, completed: false}
-                    const req = await axios.post("/tasks", dataJson)
+                    const req  = await api.addTask(this.task)
                     this.getTasks()
                     this.task = null
                 } else {
@@ -47,12 +45,10 @@
                 }
             },
             async getTasks() {
-                const req = await axios.get("/tasks")
-                this.tasks = req.data
+                this.tasks = await api.getTasks()
             },
             async deleteTask(id) {
-                const dataJson = {task: this.task}
-                const req = await axios.delete(`http://localhost:3000/tasks/${id}`, dataJson)
+                const req = await api.deleteTask(id, this.task)
                 this.task = null
                 this.getTasks()
             },
@@ -65,9 +61,7 @@
             },
             async editTask() {
                 if (this.task != null) {
-                    const newTask = this.task
-                    const dataJson = {task: newTask}
-                    const req = await axios.patch(`http://localhost:3000/tasks/${this.id}`, dataJson)
+                    const req = await api.editTask(this.id, this.task)
                     this.task = null
                     this.getTasks()
                     this.id = null
@@ -77,18 +71,16 @@
                 }
             },
             async editCompleted(id) {
-                const get = await axios.get(`http://localhost:3000/tasks/${id}`)
-                let dataJson
-                if (get.data.completed == true) {
-                    dataJson = {completed: false}
+                const get = await api.getTasks(id)
+                if (get.completed == true) {
+                    const req = await api.editTask(id, {completed: false})
                 } else {
-                    dataJson = {completed: true}
+                    const req = await api.editTask(id, {completed: true})
                 }
-                const req = await axios.patch(`http://localhost:3000/tasks/${id}`, dataJson)
                 this.getTasks()
             }
         },
-        mounted() {
+        created() {
             this.getTasks()
         }
     }
