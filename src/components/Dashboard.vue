@@ -70,7 +70,7 @@
                 }
             },
             async editCompleted(id) {
-                const get = await api.getTasks(id)
+                const get = await api.getTask(id)
                 if (get.completed == true) {
                     const req = await api.editTask(id, {completed: false})
                 } else {
