@@ -30,7 +30,6 @@
                 task: null,
                 id: null,
                 editableMode: false,
-                completed: false,
                 placeholderMsg: "Add a new task"
             }
         },
