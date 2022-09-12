@@ -52,10 +52,13 @@
                 this.getTasks()
             },
             editStatus(id) {
+                console.log(this.editableMode)
                 this.editableMode = !this.editableMode
                 this.id = id
                 if (this.editableMode) {
                     this.placeholderMsg = "Edit task"
+                } else {
+                    this.placeholderMsg = "Add a new task"
                 }
             },
             async editTask() {
